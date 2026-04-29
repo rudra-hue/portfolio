@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rudra Parmar — Projects</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+  <style>
+    @import url('https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,900&f[]=satoshi@400,500,700&display=swap');
+
+    :root {
+      --bg: #050505;
+      --accent-cyan: #00f2ff;
+      --accent-magenta: #7000ff;
+      --surface: #111111;
+    }
+
+    body {
+      font-family: 'Satoshi', sans-serif;
+      background-color: var(--bg);
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3 { font-family: 'Cabinet Grotesk', sans-serif; }
+    .perspective-1000 { perspective: 1000px; }
+    .preserve-3d { transform-style: preserve-3d; }
+    .hover-3d:hover { transform: rotateY(15deg) rotateX(10deg) translateZ(20px); }
+    .neon-glow-cyan { text-shadow: 0 0 10px rgba(0, 242, 255, 0.5), 0 0 20px rgba(0, 242, 255, 0.3); }
+
+    .bg-noise { background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png'); opacity: 0.1; }
+
+    .grid-bg {
+      background-image: linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+
+    .section-transition { transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
+  </style>
+</head>
+
+<body>
+  <div class="min-h-screen relative selection:bg-cyan-500/30">
+    <div class="fixed inset-0 bg-noise pointer-events-none z-0"></div>
+    <div class="fixed inset-0 grid-bg pointer-events-none z-0 opacity-40"></div>
+    <nav class="fixed top-0 w-full z-50 px-8 py-6 flex justify-between items-center backdrop-blur-md bg-black/10 border-b border-white/5">
+      <a id="nav-logo-link" href="index.html" class="text-2xl font-black tracking-tighter text-white hover:text-cyan-400 transition-colors">RP<span class="text-cyan-500">.</span></a>
+      <div class="hidden md:flex gap-10 items-center font-medium text-white/70">
+        <a id="nav-home-link" href="index.html" class="hover:text-cyan-400 transition-colors uppercase text-xs tracking-widest">Home</a>
+        <a id="nav-about-link" href="about.html" class="hover:text-cyan-400 transition-colors uppercase text-xs tracking-widest">About</a>
+        <a id="nav-skills-link" href="skills.html" class="hover:text-cyan-400 transition-colors uppercase text-xs tracking-widest">Skills</a>
+        <a id="nav-projects-link" href="projects.html" class="text-cyan-400 transition-colors uppercase text-xs tracking-widest">Projects</a>
+        <a id="nav-contact-link" href="contact.html" class="px-6 py-2 bg-white text-black hover:bg-cyan-400 transition-all font-bold rounded-full uppercase text-xs tracking-widest">Hire Me</a>
+      </div>
+    </nav>
+    <main class="relative z-10 pt-24">
+      <section id="projects" class="py-20 px-8 min-h-[calc(100vh-100px)]">
+        <div class="max-w-7xl mx-auto pt-8">
+          <div class="flex justify-between items-end mb-16">
+            <h2 class="text-5xl md:text-7xl font-black">SELECTED<br />PROJECTS</h2>
+          </div>
+          <div class="grid md:grid-cols-2 gap-12">
+            <!-- Project 1 -->
+            <a href="#" class="group perspective-1000 block">
+              <div class="relative aspect-[16/10] bg-zinc-800 overflow-hidden preserve-3d transition-transform duration-700 group-hover:rotate-x-6 group-hover:translate-z-10">
+                <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=1200" alt="Speech Recognition" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-80"></div>
+                <div class="absolute bottom-6 left-8 right-8">
+                  <span class="text-xs font-black bg-cyan-500 text-black px-3 py-1 mb-4 inline-block">AI / ML</span>
+                  <h3 class="text-3xl font-black uppercase text-white mb-2">Speech Recognition Assistant</h3>
+                </div>
+              </div>
+            </a>
+            <!-- Project 2 -->
+            <a href="https://study-tracker-1-ek30.onrender.com/" target="_blank" class="group perspective-1000 block">
+              <div class="relative aspect-[16/10] bg-zinc-800 overflow-hidden preserve-3d transition-transform duration-700 group-hover:rotate-x-6 group-hover:translate-z-10">
+                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=1200" alt="Study Tracker" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-80"></div>
+                <div class="absolute bottom-6 left-8 right-8">
+                  <span class="text-xs font-black bg-purple-500 text-white px-3 py-1 mb-4 inline-block">WEB APP</span>
+                  <h3 class="text-3xl font-black uppercase text-white mb-2">Study Tracker</h3>
+                  <p class="text-sm text-white/70 mb-2">Flask backend web app to track and manage daily study sessions with habit-to-text tools.</p>
+                </div>
+              </div>
+            </a>
+            <!-- Project 3 -->
+            <a href="https://student-performance-predictor-68hj.onrender.com/" target="_blank" class="group perspective-1000 block">
+              <div class="relative aspect-[16/10] bg-zinc-800 overflow-hidden preserve-3d transition-transform duration-700 group-hover:rotate-x-6 group-hover:translate-z-10">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1200" alt="Student Predictor" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-80"></div>
+                <div class="absolute bottom-6 left-8 right-8">
+                  <span class="text-xs font-black bg-cyan-500 text-black px-3 py-1 mb-4 inline-block">REGRESSION / DATA</span>
+                  <h3 class="text-3xl font-black uppercase text-white mb-2">Student Performance Predictor</h3>
+                  <p class="text-sm text-white/70 mb-2">An ML model that predicts student academic performance using regression and data preprocessing.</p>
+                </div>
+              </div>
+            </a>
+            <!-- Project 4 -->
+            <a href="https://app-aj052kdn2801.appmedo.com" target="_blank" class="group perspective-1000 block">
+              <div class="relative aspect-[16/10] bg-zinc-800 overflow-hidden preserve-3d transition-transform duration-700 group-hover:rotate-x-6 group-hover:translate-z-10">
+                <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=1200" alt="AppMedo" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-80"></div>
+                <div class="absolute bottom-6 left-8 right-8">
+                  <span class="text-xs font-black bg-purple-500 text-white px-3 py-1 mb-4 inline-block">HEALTHCARE</span>
+                  <h3 class="text-3xl font-black uppercase text-white mb-2">AppMedo</h3>
+                  <p class="text-sm text-white/70 mb-2">A web-based platform addressing real-world healthcare problems with a focus on usability.</p>
+                </div>
+              </div>
+            </a>
+            <!-- Project 5 -->
+            <a href="#" class="group perspective-1000 block">
+              <div class="relative aspect-[16/10] bg-zinc-800 overflow-hidden preserve-3d transition-transform duration-700 group-hover:rotate-x-6 group-hover:translate-z-10">
+                <img src="https://images.unsplash.com/photo-1588693720745-f09d57a41285?auto=format&fit=crop&q=80&w=1200" alt="Racing Game" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-80"></div>
+                <div class="absolute bottom-6 left-8 right-8">
+                  <span class="text-xs font-black bg-white text-black px-3 py-1 mb-4 inline-block">PYTHON / PYGAME</span>
+                  <h3 class="text-3xl font-black uppercase text-white mb-2">2D Car Racing Game</h3>
+                  <p class="text-sm text-white/70 mb-2">Built with Pygame implementing collision detection and robust game loop logic.</p>
+                </div>
+              </div>
+            </a>
+            <!-- Project 6 -->
+            <a href="#" class="group perspective-1000 block">
+              <div class="relative aspect-[16/10] bg-zinc-800 overflow-hidden preserve-3d transition-transform duration-700 group-hover:rotate-x-6 group-hover:translate-z-10">
+                <img src="https://images.unsplash.com/photo-1611339555312-e607c8352fd7?auto=format&fit=crop&q=80&w=1200" alt="Spotify API" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-80"></div>
+                <div class="absolute bottom-6 left-8 right-8">
+                  <span class="text-xs font-black bg-[#1DB954] text-white px-3 py-1 mb-4 inline-block">API INTEGRATION</span>
+                  <h3 class="text-3xl font-black uppercase text-white mb-2">Spotify API Tool</h3>
+                  <p class="text-sm text-white/70 mb-2">Python project handling OAuth authentication, network requests, and real-world API error debugging.</p>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="py-12 border-t border-white/5 px-8 flex flex-col md:flex-row justify-between items-center gap-8 text-white/40 text-xs font-bold uppercase tracking-widest">
+      <p>© 2026 Rudra Parmar. All rights reserved.</p>
+      <div class="flex gap-8">
+        <a href="https://github.com/rudra-hue" target="_blank" class="hover:text-white transition-colors">GitHub</a>
+      </div>
+      <p>Designed for the digital elite.</p>
+    </footer>
+  </div>
+  <script>
+    const observerOptions = { threshold: 0.1 };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('opacity-100', 'translate-y-0');
+          entry.target.classList.remove('opacity-0', 'translate-y-10');
+        }
+      });
+    }, observerOptions);
+    document.querySelectorAll('section').forEach(section => {
+      section.classList.add('opacity-0', 'translate-y-10', 'section-transition');
+      observer.observe(section);
+    });
+  </script>
+</body>
+
+</html>
