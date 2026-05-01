@@ -1,4 +1,3 @@
-document.addEventListener('DOMContentLoaded', () => {
   // ─── LOADER ───────────────────────────────────────
   setTimeout(() => {
     const loader = document.getElementById('loader');
@@ -194,4 +193,3 @@ document.addEventListener('DOMContentLoaded', () => {
       card.style.setProperty('--y', y + '%');
     });
   });
-});
