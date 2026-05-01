@@ -7,55 +7,27 @@
   <title>Rudra Parmar — ML Engineer</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
-  <style>
-    @import url('https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,900&f[]=satoshi@400,500,700&display=swap');
-
-    :root {
-      --bg: #050505;
-      --accent-cyan: #00f2ff;
-      --accent-magenta: #7000ff;
-      --surface: #111111;
-    }
-
-    body {
-      font-family: 'Satoshi', sans-serif;
-      background-color: var(--bg);
-      color: #fff;
-      overflow-x: hidden;
-    }
-
-    h1, h2, h3 { font-family: 'Cabinet Grotesk', sans-serif; }
-    .perspective-1000 { perspective: 1000px; }
-    .preserve-3d { transform-style: preserve-3d; }
-    .hover-3d:hover { transform: rotateY(15deg) rotateX(10deg) translateZ(20px); }
-    .neon-glow-cyan { text-shadow: 0 0 10px rgba(0, 242, 255, 0.5), 0 0 20px rgba(0, 242, 255, 0.3); }
-    .neon-glow-magenta { text-shadow: 0 0 10px rgba(112, 0, 255, 0.5), 0 0 20px rgba(112, 0, 255, 0.3); }
-    .bg-noise { background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png'); opacity: 0.1; }
-    .floating { animation: float 6s ease-in-out infinite; }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-20px); }
-    }
-
-    .grid-bg {
-      background-image: linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
-      background-size: 50px 50px;
-    }
-
-    .section-transition { transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
-    .translate-z-20 { transform: translateZ(20px); }
-    .translate-z-40 { transform: translateZ(40px); }
-    .translate-z-50 { transform: translateZ(50px); }
-    .group:hover .group-hover\:translate-z-20 { transform: translateZ(20px); }
-    .group:hover .group-hover\:translate-z-40 { transform: translateZ(40px); }
-    .group:hover .group-hover\:translate-z-50 { transform: translateZ(50px); }
-  </style>
-</head>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Exo+2:wght@400;600;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+  </head>
 
 <body>
+  <!-- CURSOR -->
+  <div id="cursor"></div>
+  <div id="cursor-trail"></div>
+
+  <!-- LOADER -->
+  <div id="loader">
+    <div class="loader-text">POWERING UP...</div>
+    <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+    <div style="font-family:'Orbitron',monospace;font-size:0.65rem;letter-spacing:4px;color:rgba(0,212,255,0.6);">RUDRA PARMAR — INITIALIZING</div>
+  </div>
+
+  <!-- PARTICLES -->
+  <canvas id="particles-canvas"></canvas>
+
   <div class="min-h-screen relative selection:bg-cyan-500/30">
-    <div class="fixed inset-0 bg-noise pointer-events-none z-0"></div>
+    <div class="fixed inset-0 pointer-events-none z-0"></div>
     <div class="fixed inset-0 grid-bg pointer-events-none z-0 opacity-40"></div>
     <nav class="fixed top-0 w-full z-50 px-8 py-6 flex justify-between items-center backdrop-blur-md bg-black/10 border-b border-white/5">
       <a id="nav-logo-link" href="index.html" class="text-2xl font-black tracking-tighter text-white hover:text-cyan-400 transition-colors">RP<span class="text-cyan-500">.</span></a>
@@ -83,12 +55,12 @@
     </nav>
     <main class="relative z-10">
       <section id="home" class="min-h-screen border-b border-white/5 flex items-center justify-center px-4 md:px-8 perspective-1000 overflow-hidden relative">
-        <!-- Interactive Particle Network Background -->
-        <div id="particles-js" class="absolute inset-0 z-0 opacity-60 mix-blend-screen"></div>
+        <div class="hero-bg"></div>
+        <div class="stars"></div>
 
         <!-- Heavy Ambient Glow -->
         <div class="absolute inset-0 z-0 pointer-events-none flex items-center justify-center">
-          <div class="w-[50vw] h-[30vh] bg-cyan-500/10 blur-[120px] rounded-[100%] rounded-tr-[50%] animate-pulse"></div>
+          <div class="w-[50vw] h-[30vh] bg-blue-500/10 blur-[120px] rounded-[100%] rounded-tr-[50%] animate-pulse"></div>
           <div class="w-[30vw] h-[50vh] bg-purple-500/10 blur-[120px] rounded-full absolute mix-blend-screen"></div>
         </div>
 
@@ -96,7 +68,7 @@
           
           <!-- Terminal / Core Log HUD -->
           <div class="absolute top-1/4 left-4 md:left-10 z-20 group-hover:-translate-x-4 group-hover:-translate-y-4 transition-transform duration-1000 hidden xl:block translate-z-50 shrink-0">
-            <div class="bg-black/60 backdrop-blur-xl border border-white/10 rounded-xl p-5 w-80 font-mono text-xs shadow-[0_0_30px_rgba(0,242,255,0.15)] text-left">
+            <div class="bg-black/60 backdrop-blur-xl border border-white/10 rounded-xl p-5 w-80 font-mono text-xs shadow-[0_0_30px_rgba(0,102,255,0.15)] text-left">
               <div class="flex gap-2 mb-4 border-b border-white/10 pb-3">
                 <div class="w-3 h-3 rounded-full bg-red-500/80 shadow-[0_0_10px_red]"></div>
                 <div class="w-3 h-3 rounded-full bg-yellow-500/80 shadow-[0_0_10px_yellow]"></div>
@@ -127,35 +99,31 @@
 
           <!-- Main Hero container reacting to hover -->
           <div class="relative inline-block preserve-3d transition-transform duration-[1500ms] ease-out group-hover:rotate-y-12 group-hover:rotate-x-6">
-            <div class="inline-flex items-center gap-2 px-5 py-2 mb-10 border border-cyan-500/30 bg-black/40 backdrop-blur-md text-cyan-400 text-xs font-bold uppercase tracking-widest rounded-full translate-z-20 shadow-[0_0_20px_rgba(0,242,255,0.1)]">
-              <span class="relative flex h-2 w-2">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
-              </span>
+            <div class="hero-badge">
+              <div class="badge-dot"></div>
               System Architecture Online
             </div>
             
-            <h1 class="text-[5rem] sm:text-[7rem] md:text-[9rem] lg:text-[11rem] font-black leading-[0.8] tracking-tighter mb-6 neon-glow-cyan translate-z-40">
-              RUDRA<br />
-              <span class="text-gradient-animate relative">PARMAR<div class="absolute -right-6 md:-right-16 top-0 text-lg md:text-3xl text-cyan-500 rotate-90 tracking-widest font-black hidden md:block opacity-50">DEV_</div></span>
+            <h1 class="hero-name translate-z-40">
+              <span class="line1">RUDRA</span>
+              <span class="line2 text-gradient-animate relative">PARMAR<div class="absolute -right-6 md:-right-16 top-0 text-lg md:text-3xl text-blue-500 rotate-90 tracking-widest font-black hidden md:block opacity-50 font-sans" style="font-family:'Orbitron', monospace;">DEV_</div></span>
             </h1>
             
-            <p class="text-lg md:text-xl xl:text-3xl text-white/80 max-w-3xl mx-auto font-medium tracking-wide translate-z-30 backdrop-blur-lg bg-black/50 p-6 md:p-8 border-y md:border border-white/10 md:rounded-2xl mt-12 shadow-[0_10px_40px_rgba(0,0,0,0.8)]">
+            <p class="hero-tagline translate-z-30 backdrop-blur-lg bg-black/50 p-6 md:p-8 border-y md:border border-white/10 md:rounded-2xl mt-12 mx-auto" style="max-width: 600px;">
               Engineering Reality Through 
-              <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 font-black" id="typewriter">Code & Patterns</span>
-              <span class="animate-pulse font-black text-cyan-400">_</span>
+              <em id="typewriter" class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-blue-400">Code & Patterns</em>
+              <span class="animate-pulse font-black text-orange-400">_</span>
               <br>
-              <span class="text-xs md:text-sm text-white/40 uppercase tracking-[0.3em] font-black block mt-6 text-left border-l-2 border-cyan-500 pl-4">Target: Transform Logic Into Impact</span>
+              <span class="hero-quote" style="display:inline-block; margin-top:20px;">TARGET: TRANSFORM LOGIC INTO IMPACT</span>
             </p>
             
             <div class="mt-14 flex flex-col sm:flex-row justify-center gap-6 translate-z-30 px-4">
-              <a id="hero-work-link" href="projects.html" class="group/btn relative px-8 py-5 bg-cyan-500 text-black font-black uppercase tracking-widest transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-3 w-full sm:w-auto hover:bg-white">
+              <a id="hero-work-link" href="projects.html" class="neon-btn-primary w-full sm:w-auto flex items-center justify-center gap-3">
                 <span class="relative z-10">Access Projects</span>
-                <iconify-icon icon="lucide:arrow-right" class="relative z-10 group-hover/btn:translate-x-2 transition-transform"></iconify-icon>
-                <div class="absolute inset-0 bg-white blur-xl opacity-0 group-hover/btn:opacity-60 transition-opacity"></div>
+                <iconify-icon icon="lucide:arrow-right" class="relative z-10"></iconify-icon>
               </a>
-              <a id="hero-github-link" href="https://github.com/rudra-hue" target="_blank" class="px-8 py-5 border border-white/20 hover:border-cyan-400 hover:text-cyan-400 hover:bg-cyan-500/10 transition-all uppercase tracking-widest text-sm font-bold backdrop-blur-md bg-black/40 flex items-center justify-center gap-3 w-full sm:w-auto group/gh">
-                <iconify-icon icon="mdi:github" class="text-2xl group-hover/gh:scale-125 transition-transform duration-300"></iconify-icon> Review Code
+              <a id="hero-github-link" href="https://github.com/rudra-hue" target="_blank" class="neon-btn-secondary w-full sm:w-auto flex items-center justify-center gap-3">
+                <iconify-icon icon="mdi:github" class="text-2xl"></iconify-icon> Review Code
               </a>
             </div>
           </div>
@@ -206,58 +174,8 @@
       <p>Designed for the digital elite.</p>
     </footer>
   </div>
-  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script src="main.js"></script>
   <script>
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        if(document.querySelector(this.getAttribute('href'))) {
-          e.preventDefault();
-          document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
-        }
-      });
-    });
-    const observerOptions = { threshold: 0.1 };
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('opacity-100', 'translate-y-0');
-          entry.target.classList.remove('opacity-0', 'translate-y-10');
-        }
-      });
-    }, observerOptions);
-    document.querySelectorAll('section').forEach(section => {
-      section.classList.add('opacity-0', 'translate-y-10', 'section-transition');
-      observer.observe(section);
-    });
-
-    // Particle.js Configuration
-    if(document.getElementById('particles-js')) {
-      particlesJS("particles-js", {
-        "particles": {
-          "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
-          "color": { "value": "#00f2ff" },
-          "shape": { "type": "circle" },
-          "opacity": { "value": 0.4, "random": false },
-          "size": { "value": 2, "random": true },
-          "line_linked": { "enable": true, "distance": 150, "color": "#7000ff", "opacity": 0.5, "width": 1 },
-          "move": { "enable": true, "speed": 1.5, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
-        },
-        "interactivity": {
-          "detect_on": "canvas",
-          "events": { 
-            "onhover": { "enable": true, "mode": "grab" }, 
-            "onclick": { "enable": true, "mode": "push" }, 
-            "resize": true 
-          },
-          "modes": { 
-            "grab": { "distance": 180, "line_linked": { "opacity": 0.8 } }, 
-            "push": { "particles_nb": 4 } 
-          }
-        },
-        "retina_detect": true
-      });
-    }
-
     // Interactive Terminal Animation
     const termLines = [
       "> Initializing Machine Learning Core...",
@@ -296,22 +214,6 @@
         }, 500);
       }, 3000);
       typewriterElement.style.transition = 'opacity 0.5s ease-in-out';
-    }
-  </script>
-
-  <!-- Mobile Menu Script -->
-  <script>
-    const mobileBtn = document.getElementById('mobile-menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    if(mobileBtn && mobileMenu) {
-      mobileBtn.addEventListener('click', () => {
-        mobileMenu.classList.toggle('opacity-0');
-        mobileMenu.classList.toggle('pointer-events-none');
-        mobileMenu.classList.toggle('-translate-y-4');
-        mobileMenu.classList.toggle('opacity-100');
-        mobileMenu.classList.toggle('pointer-events-auto');
-        mobileMenu.classList.toggle('translate-y-0');
-      });
     }
   </script>
 </body>

@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAJ TRIVEDI — Prompt Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Exo+2:wght@400;600;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --orange: #ff6b00;
+  --orange-glow: #ff9a00;
+  --blue: #00d4ff;
+  --blue-dark: #0066ff;
+  --purple: #9b30ff;
+  --purple-dark: #5a00cc;
+  --electric: #e0f7ff;
+  --dark: #04060f;
+  --dark2: #080d1a;
+  --dark3: #0d1428;
+  --text: #e8f4ff;
+  --text-dim: #8aa0c8;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--dark);
+  color: var(--text);
+  font-family: 'Exo 2', sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* CUSTOM CURSOR */
+#cursor {
+  position: fixed; width: 12px; height: 12px;
+  background: var(--blue); border-radius: 50%;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 15px var(--blue), 0 0 30px var(--blue);
+  transition: transform 0.1s, width 0.2s, height 0.2s;
+}
+#cursor-trail {
+  position: fixed; width: 30px; height: 30px;
+  border: 1px solid rgba(0, 212, 255, 0.4);
+  border-radius: 50%; pointer-events: none; z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: all 0.15s ease;
+}
+
+/* LOADER */
+#loader {
+  position: fixed; inset: 0; z-index: 10000;
+  background: var(--dark);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 20px;
+}
+.loader-text {
+  font-family: 'Bangers', cursive;
+  font-size: 4rem;
+  letter-spacing: 8px;
+  background: linear-gradient(135deg, var(--orange), var(--blue), var(--purple));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  animation: powerPulse 0.5s ease-in-out infinite alternate;
+}
+.loader-bar-wrap {
+  width: 300px; height: 6px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 3px; overflow: hidden;
+}
+.loader-bar {
+  height: 100%; width: 0;
+  background: linear-gradient(90deg, var(--orange), var(--blue));
+  border-radius: 3px;
+  box-shadow: 0 0 12px var(--blue);
+  animation: loadProgress 2s ease forwards;
+}
+@keyframes loadProgress { to { width: 100%; } }
+@keyframes powerPulse {
+  from { text-shadow: 0 0 20px var(--orange); }
+  to { text-shadow: 0 0 60px var(--blue), 0 0 100px var(--purple); }
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 1000; padding: 16px 40px;
+  display: flex; justify-content: space-between; align-items: center;
+  background: rgba(4, 6, 15, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 212, 255, 0.15);
+}
+.nav-logo {
+  font-family: 'Bangers', cursive;
+  font-size: 1.8rem;
+  letter-spacing: 4px;
+  background: linear-gradient(135deg, var(--orange), var(--orange-glow));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  text-shadow: none;
+}
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: all 0.3s;
+  position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -4px; left: 0;
+  width: 0; height: 2px;
+  background: linear-gradient(90deg, var(--orange), var(--blue));
+  transition: width 0.3s;
+}
+.nav-links a:hover { color: var(--blue); }
+.nav-links a:hover::after { width: 100%; }
+
+/* PARTICLES CANVAS */
+#particles-canvas {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+}
+
+/* HERO */
+#hero {
+  position: relative; min-height: 100vh;
+  display: flex; align-items: center;
+  overflow: hidden; padding: 0 60px;
+  padding-top: 80px;
+}
+
+/* Sky battlefield background */
+.hero-bg {
+  position: absolute; inset: 0; z-index: 1;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,102,255,0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 80% 20%, rgba(155,48,255,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 20% 70%, rgba(255,107,0,0.1) 0%, transparent 60%),
+    linear-gradient(180deg, #04060f 0%, #080d1a 40%, #0a0520 100%);
+}
+
+/* Mountain silhouettes */
+.mountains {
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
+  height: 220px;
+}
+.mountain-svg { width: 100%; height: 100%; }
+
+/* Stars */
+.stars {
+  position: absolute; inset: 0; z-index: 1;
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, white 0%, transparent 100%),
+    radial-gradient(1px 1px at 30% 10%, white 0%, transparent 100%),
+    radial-gradient(2px 2px at 50% 5%, white 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 15%, white 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 8%, white 0%, transparent 100%),
+    radial-gradient(1px 1px at 15% 50%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 45%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 45% 35%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(2px 2px at 25% 80%, rgba(200,200,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 75% 75%, rgba(200,200,255,0.4) 0%, transparent 100%);
+}
+
+/* HERO CONTENT */
+.hero-content {
+  position: relative; z-index: 10;
+  flex: 1; max-width: 55%;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 16px;
+  border: 1px solid rgba(0, 212, 255, 0.4);
+  border-radius: 20px;
+  background: rgba(0, 212, 255, 0.08);
+  font-size: 0.75rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 20px;
+  animation: fadeSlideUp 0.8s 2.2s both;
+}
+.badge-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--blue);
+  box-shadow: 0 0 8px var(--blue);
+  animation: blink 1.2s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.hero-name {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(4rem, 8vw, 8rem);
+  line-height: 0.95;
+  letter-spacing: 4px;
+  margin-bottom: 8px;
+  animation: fadeSlideUp 0.8s 2.4s both;
+}
+.hero-name .line1 {
+  display: block;
+  background: linear-gradient(135deg, #ffffff 0%, var(--orange-glow) 50%, var(--orange) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 30px rgba(255, 107, 0, 0.6));
+}
+.hero-name .line2 {
+  display: block;
+  background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.5));
+}
+
+.hero-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 1.1rem;
+  letter-spacing: 6px;
+  color: var(--blue);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  animation: fadeSlideUp 0.8s 2.6s both;
+}
+
+.hero-tagline {
+  font-size: 1.1rem;
+  color: var(--text-dim);
+  line-height: 1.7;
+  max-width: 480px;
+  margin-bottom: 40px;
+  animation: fadeSlideUp 0.8s 2.8s both;
+}
+.hero-tagline em { color: var(--orange-glow); font-style: normal; font-weight: 700; }
+
+.hero-quote {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  color: rgba(255,107,0,0.7);
+  border-left: 2px solid var(--orange);
+  padding-left: 12px;
+  margin-bottom: 40px;
+  animation: fadeSlideUp 0.8s 3s both;
+}
+
+.hero-buttons {
+  display: flex; gap: 20px; flex-wrap: wrap;
+  animation: fadeSlideUp 0.8s 3.2s both;
+}
+
+.btn-primary {
+  padding: 14px 32px;
+  background: linear-gradient(135deg, var(--orange), var(--orange-glow));
+  border: none; border-radius: 4px;
+  color: white; font-family: 'Orbitron', monospace;
+  font-size: 0.8rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  cursor: pointer; position: relative; overflow: hidden;
+  transition: all 0.3s;
+  box-shadow: 0 0 20px rgba(255,107,0,0.4);
+  text-decoration: none; display: inline-block;
+}
+.btn-primary::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, transparent, rgba(255,255,255,0.2), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s;
+}
+.btn-primary:hover::before { transform: translateX(100%); }
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(255,107,0,0.6), 0 0 60px rgba(255,107,0,0.2);
+}
+
+.btn-secondary {
+  padding: 14px 32px;
+  background: transparent;
+  border: 1px solid rgba(0,212,255,0.5);
+  border-radius: 4px;
+  color: var(--blue); font-family: 'Orbitron', monospace;
+  font-size: 0.8rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  cursor: pointer; transition: all 0.3s;
+  text-decoration: none; display: inline-block;
+}
+.btn-secondary:hover {
+  background: rgba(0,212,255,0.1);
+  border-color: var(--blue);
+  box-shadow: 0 0 25px rgba(0,212,255,0.3);
+  transform: translateY(-2px);
+}
+
+/* CHARACTER */
+.hero-character {
+  position: absolute; right: -20px; bottom: 0; z-index: 9;
+  width: 520px; height: 620px;
+  animation: heroFloat 4s ease-in-out infinite;
+}
+
+@keyframes heroFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-18px); }
+}
+
+/* AURA RINGS */
+.aura-container {
+  position: absolute; right: 140px; bottom: 60px;
+  width: 320px; height: 320px; z-index: 7;
+}
+.aura-ring {
+  position: absolute; border-radius: 50%;
+  border: 2px solid transparent;
+  animation: auraPulse 2.5s ease-in-out infinite;
+}
+.aura-ring:nth-child(1) {
+  inset: 30px;
+  border-color: rgba(0,212,255,0.6);
+  box-shadow: 0 0 20px rgba(0,212,255,0.4), inset 0 0 20px rgba(0,212,255,0.1);
+  animation-delay: 0s;
+}
+.aura-ring:nth-child(2) {
+  inset: 10px;
+  border-color: rgba(155,48,255,0.5);
+  box-shadow: 0 0 30px rgba(155,48,255,0.3), inset 0 0 30px rgba(155,48,255,0.05);
+  animation-delay: 0.4s;
+}
+.aura-ring:nth-child(3) {
+  inset: -10px;
+  border-color: rgba(255,107,0,0.3);
+  box-shadow: 0 0 40px rgba(255,107,0,0.2);
+  animation-delay: 0.8s;
+}
+@keyframes auraPulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
+
+/* LIGHTNING BOLTS */
+.lightning-container {
+  position: absolute; inset: 0; z-index: 6; pointer-events: none;
+  overflow: hidden;
+}
+.lightning {
+  position: absolute;
+  width: 2px;
+  background: linear-gradient(180deg, transparent, var(--blue), var(--electric), transparent);
+  border-radius: 1px;
+  opacity: 0;
+  filter: blur(0.5px);
+  box-shadow: 0 0 6px var(--blue), 0 0 12px var(--blue);
+}
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* SECTIONS */
+section {
+  position: relative; z-index: 5;
+  padding: 100px 60px;
+}
+
+.section-title {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  letter-spacing: 4px;
+  text-align: center;
+  margin-bottom: 12px;
+}
+.section-title span {
+  background: linear-gradient(135deg, var(--orange), var(--blue));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.section-line {
+  width: 80px; height: 3px;
+  background: linear-gradient(90deg, var(--orange), var(--blue));
+  margin: 0 auto 60px;
+  border-radius: 2px;
+  box-shadow: 0 0 12px var(--blue);
+}
+
+/* ABOUT */
+#about {
+  background: linear-gradient(180deg, var(--dark) 0%, var(--dark2) 100%);
+}
+.about-inner {
+  max-width: 900px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1.8fr; gap: 60px; align-items: center;
+}
+.about-avatar-wrap {
+  position: relative; display: flex; justify-content: center;
+}
+.about-avatar-glow {
+  position: absolute;
+  width: 220px; height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,212,255,0.25), rgba(155,48,255,0.15), transparent 70%);
+  animation: auraPulse 3s ease-in-out infinite;
+}
+.about-avatar-svg {
+  position: relative; z-index: 2;
+  width: 180px; height: 180px;
+  animation: heroFloat 4s ease-in-out infinite;
+}
+.about-text h3 {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 4px;
+  color: var(--orange);
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+.about-text p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--text-dim);
+  margin-bottom: 20px;
+}
+.about-text p strong { color: var(--text); }
+.about-stats {
+  display: flex; gap: 30px; flex-wrap: wrap;
+  margin-top: 10px;
+}
+.stat-item {
+  text-align: center;
+  padding: 12px 20px;
+  border: 1px solid rgba(0,212,255,0.2);
+  border-radius: 6px;
+  background: rgba(0,212,255,0.05);
+  transition: all 0.3s;
+}
+.stat-item:hover {
+  border-color: var(--blue);
+  box-shadow: 0 0 15px rgba(0,212,255,0.2);
+  transform: translateY(-3px);
+}
+.stat-num {
+  font-family: 'Bangers', cursive;
+  font-size: 2rem;
+  background: linear-gradient(135deg, var(--orange), var(--blue));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.stat-label { font-size: 0.75rem; color: var(--text-dim); letter-spacing: 1px; }
+
+/* SKILLS */
+#skills {
+  background: var(--dark2);
+}
+.skills-grid {
+  max-width: 800px; margin: 0 auto;
+  display: flex; flex-direction: column; gap: 28px;
+}
+.skill-item { }
+.skill-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 10px;
+}
+.skill-name {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.85rem;
+  letter-spacing: 3px;
+  color: var(--text);
+  text-transform: uppercase;
+}
+.skill-level {
+  font-family: 'Bangers', cursive;
+  font-size: 1.1rem;
+  color: var(--orange);
+  letter-spacing: 1px;
+}
+.skill-bar-bg {
+  height: 12px; background: rgba(255,255,255,0.06);
+  border-radius: 6px; overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.skill-bar {
+  height: 100%; width: 0;
+  border-radius: 6px;
+  position: relative;
+  transition: width 1.5s cubic-bezier(0.17, 0.67, 0.24, 1.0);
+}
+.skill-bar::after {
+  content: '';
+  position: absolute; right: 0; top: 0; bottom: 0;
+  width: 30px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 0 6px 6px 0;
+  filter: blur(4px);
+}
+.skill-bar.pe { background: linear-gradient(90deg, #ff6b00, #ff9a00, #ffce00); box-shadow: 0 0 15px rgba(255,107,0,0.5); }
+.skill-bar.py { background: linear-gradient(90deg, #0066ff, #00d4ff); box-shadow: 0 0 15px rgba(0,212,255,0.5); }
+.skill-bar.ja { background: linear-gradient(90deg, #9b30ff, #d400ff); box-shadow: 0 0 15px rgba(155,48,255,0.5); }
+.skill-bar.ps { background: linear-gradient(90deg, #00cc88, #00ffcc); box-shadow: 0 0 15px rgba(0,255,200,0.4); }
+.skill-bar.ai { background: linear-gradient(90deg, #ff3366, #ff6600, #ffcc00); box-shadow: 0 0 15px rgba(255,100,50,0.5); }
+
+.skill-power-label {
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+
+/* PROJECTS */
+#projects { background: var(--dark); }
+.projects-grid {
+  max-width: 1000px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
+}
+.project-card {
+  background: rgba(13, 20, 40, 0.8);
+  border: 1px solid rgba(0,212,255,0.15);
+  border-radius: 12px;
+  padding: 32px;
+  position: relative; overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.17, 0.67, 0.24, 1.0);
+  cursor: pointer;
+}
+.project-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(0,212,255,0.05), rgba(155,48,255,0.05));
+  opacity: 0; transition: opacity 0.4s;
+}
+.project-card::after {
+  content: ''; position: absolute;
+  top: -50%; left: -50%; width: 200%; height: 200%;
+  background: conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(0,212,255,0.15) 60deg, transparent 120deg);
+  animation: rotateBorder 4s linear infinite;
+  opacity: 0; transition: opacity 0.4s;
+}
+.project-card:hover { border-color: rgba(0,212,255,0.5); transform: translateY(-8px); box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 40px rgba(0,212,255,0.15); }
+.project-card:hover::before { opacity: 1; }
+.project-card:hover::after { opacity: 1; }
+@keyframes rotateBorder { to { transform: rotate(360deg); } }
+
+.project-icon {
+  width: 52px; height: 52px; border-radius: 10px;
+  background: linear-gradient(135deg, rgba(255,107,0,0.2), rgba(0,212,255,0.2));
+  border: 1px solid rgba(255,107,0,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; margin-bottom: 20px; position: relative; z-index: 2;
+}
+.project-tag {
+  font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 10px; position: relative; z-index: 2;
+}
+.project-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 1rem; font-weight: 700;
+  color: var(--text); margin-bottom: 12px;
+  position: relative; z-index: 2;
+}
+.project-desc {
+  font-size: 0.9rem; line-height: 1.7; color: var(--text-dim);
+  margin-bottom: 24px; position: relative; z-index: 2;
+}
+.project-tech {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  position: relative; z-index: 2;
+}
+.tech-tag {
+  padding: 4px 10px;
+  border: 1px solid rgba(0,212,255,0.25);
+  border-radius: 20px;
+  font-size: 0.65rem; letter-spacing: 1px;
+  color: var(--blue); background: rgba(0,212,255,0.06);
+}
+
+/* CONTACT */
+#contact { background: var(--dark2); }
+.contact-inner { max-width: 650px; margin: 0 auto; }
+.contact-form { display: flex; flex-direction: column; gap: 20px; }
+.form-group { position: relative; }
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  background: rgba(0,212,255,0.04);
+  border: 1px solid rgba(0,212,255,0.2);
+  border-radius: 6px;
+  padding: 16px 20px;
+  color: var(--text); font-family: 'Exo 2', sans-serif;
+  font-size: 0.95rem;
+  outline: none; transition: all 0.3s;
+  resize: vertical;
+}
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 20px rgba(0,212,255,0.15), inset 0 0 10px rgba(0,212,255,0.05);
+  background: rgba(0,212,255,0.07);
+}
+.form-group input::placeholder,
+.form-group textarea::placeholder { color: rgba(138,160,200,0.5); }
+.form-group textarea { min-height: 130px; }
+
+.contact-submit {
+  padding: 16px;
+  background: linear-gradient(135deg, var(--orange), var(--orange-glow));
+  border: none; border-radius: 6px;
+  color: white; font-family: 'Orbitron', monospace;
+  font-size: 0.85rem; font-weight: 700;
+  letter-spacing: 3px; text-transform: uppercase;
+  cursor: pointer; position: relative; overflow: hidden;
+  transition: all 0.3s;
+  box-shadow: 0 0 20px rgba(255,107,0,0.3);
+}
+.contact-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(255,107,0,0.5);
+}
+.contact-submit .submit-aura {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, transparent, rgba(255,255,255,0.15), transparent);
+  transform: translateX(-100%); animation: shimmer 3s ease-in-out infinite;
+}
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  60%, 100% { transform: translateX(100%); }
+}
+
+.socials {
+  display: flex; gap: 16px; justify-content: center;
+  margin-top: 40px;
+}
+.social-btn {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 24px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 6px;
+  color: var(--text-dim);
+  text-decoration: none; font-size: 0.85rem;
+  font-weight: 600; letter-spacing: 1px;
+  transition: all 0.3s;
+}
+.social-btn:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+  box-shadow: 0 0 15px rgba(0,212,255,0.2);
+  transform: translateY(-2px);
+}
+.social-btn svg { width: 18px; height: 18px; }
+
+/* FOOTER */
+footer {
+  background: var(--dark);
+  border-top: 1px solid rgba(0,212,255,0.1);
+  padding: 30px 60px;
+  display: flex; justify-content: space-between; align-items: center;
+  position: relative; z-index: 5;
+}
+.footer-name {
+  font-family: 'Bangers', cursive;
+  font-size: 1.4rem; letter-spacing: 3px;
+  background: linear-gradient(135deg, var(--orange), var(--blue));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.footer-right { font-size: 0.8rem; color: var(--text-dim); }
+
+/* SCROLL REVEAL */
+.reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.17, 0.67, 0.24, 1.0); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ENERGY DIVIDER */
+.energy-divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--orange), var(--blue), var(--purple), transparent);
+  position: relative; z-index: 5;
+  opacity: 0.5;
+}
+
+/* SCROLL INDICATOR */
+.scroll-indicator {
+  position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+  z-index: 10; display: flex; flex-direction: column; align-items: center; gap: 6px;
+  animation: fadeSlideUp 1s 3.5s both;
+}
+.scroll-mouse {
+  width: 22px; height: 36px;
+  border: 2px solid rgba(0,212,255,0.5);
+  border-radius: 11px; position: relative;
+}
+.scroll-dot {
+  position: absolute; top: 5px; left: 50%; transform: translateX(-50%);
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--blue);
+  animation: scrollDown 1.5s ease-in-out infinite;
+}
+@keyframes scrollDown {
+  0% { top: 5px; opacity: 1; }
+  100% { top: 20px; opacity: 0; }
+}
+.scroll-label { font-size: 0.6rem; letter-spacing: 3px; color: rgba(0,212,255,0.5); }
+
+/* ELECTRIC SPARK effects in hero */
+.electric-sparks {
+  position: absolute; z-index: 8;
+  right: 200px; bottom: 200px;
+  pointer-events: none;
+}
+.spark {
+  position: absolute;
+  width: 60px; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--blue), transparent);
+  border-radius: 1px;
+  box-shadow: 0 0 6px var(--blue);
+  transform-origin: center;
+  opacity: 0;
+  animation: sparkFlash 3s ease-in-out infinite;
+}
+.spark:nth-child(1) { transform: rotate(20deg) translate(10px,-30px); animation-delay: 0s; }
+.spark:nth-child(2) { transform: rotate(-45deg) translate(-40px,-10px); animation-delay: 0.6s; }
+.spark:nth-child(3) { transform: rotate(80deg) translate(30px,20px); animation-delay: 1.2s; }
+.spark:nth-child(4) { transform: rotate(-20deg) translate(50px,10px); animation-delay: 1.8s; }
+.spark:nth-child(5) { transform: rotate(140deg) translate(-20px,40px); animation-delay: 0.9s; width: 40px; }
+@keyframes sparkFlash {
+  0%, 100% { opacity: 0; transform-origin: left center; transform: scaleX(0) rotate(var(--r, 0deg)); }
+  50% { opacity: 1; transform: scaleX(1) rotate(var(--r, 0deg)); }
+}
+
+/* Ground glow */
+.ground-glow {
+  position: absolute; bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 600px; height: 100px;
+  background: radial-gradient(ellipse at center bottom, rgba(0,212,255,0.15), transparent 70%);
+  z-index: 8; pointer-events: none;
+}
+
+/* Power level indicator */
+.power-indicator {
+  position: absolute; right: 60px; top: 50%;
+  transform: translateY(-50%);
+  z-index: 10; display: flex; flex-direction: column; align-items: center; gap: 6px;
+  animation: fadeSlideUp 1s 3.2s both;
+}
+.power-label {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.55rem; letter-spacing: 3px; color: var(--orange);
+  text-transform: uppercase; writing-mode: vertical-rl;
+  text-orientation: mixed; transform: rotate(180deg);
+}
+.power-bar-vert {
+  width: 6px; height: 120px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 3px; overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(255,107,0,0.2);
+}
+.power-fill-vert {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(0deg, var(--orange), var(--orange-glow), #ffce00);
+  border-radius: 3px;
+  animation: powerFill 2.5s 3.5s both;
+  box-shadow: 0 0 10px var(--orange);
+}
+@keyframes powerFill {
+  from { height: 0; }
+  to { height: 90%; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-trail"></div>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-text">POWERING UP...</div>
+  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+  <div style="font-family:'Orbitron',monospace;font-size:0.65rem;letter-spacing:4px;color:rgba(0,212,255,0.6);">RAJ TRIVEDI — INITIALIZING</div>
+</div>
+
+<!-- PARTICLES -->
+<canvas id="particles-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">RT</div>
+  <ul class="nav-links">
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="stars"></div>
+
+  <!-- SVG Mountains -->
+  <div class="mountains">
+    <svg class="mountain-svg" viewBox="0 0 1440 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="mtnGrad1" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#0d1428"/>
+          <stop offset="100%" stop-color="#04060f"/>
+        </linearGradient>
+        <linearGradient id="mtnGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#060b18"/>
+          <stop offset="100%" stop-color="#04060f"/>
+        </linearGradient>
+        <filter id="glow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <!-- Back mountains -->
+      <polygon points="0,220 120,80 240,140 360,50 480,120 600,30 720,110 840,20 960,90 1080,10 1200,80 1320,30 1440,100 1440,220" fill="url(#mtnGrad2)" opacity="0.7"/>
+      <!-- Front mountains -->
+      <polygon points="0,220 100,140 200,180 300,100 400,160 500,80 600,150 700,90 800,170 900,110 1000,190 1100,130 1200,170 1300,100 1440,150 1440,220" fill="url(#mtnGrad1)"/>
+      <!-- Mountain glow edges -->
+      <polyline points="0,140 100,140 200,180 300,100 400,160 500,80 600,150 700,90 800,170 900,110 1000,190 1100,130 1200,170 1300,100 1440,150" fill="none" stroke="rgba(0,212,255,0.12)" stroke-width="1.5"/>
+    </svg>
+  </div>
+
+  <!-- Aura rings behind character -->
+  <div class="aura-container">
+    <div class="aura-ring"></div>
+    <div class="aura-ring"></div>
+    <div class="aura-ring"></div>
+  </div>
+
+  <!-- Ground glow -->
+  <div class="ground-glow"></div>
+
+  <!-- Electric sparks -->
+  <div class="electric-sparks">
+    <div class="spark"></div>
+    <div class="spark"></div>
+    <div class="spark"></div>
+    <div class="spark"></div>
+    <div class="spark"></div>
+  </div>
+
+  <!-- SVG Anime Character (original design) -->
+  <svg class="hero-character" viewBox="0 0 520 620" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="auraGlow" cx="50%" cy="90%" r="60%">
+        <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.4"/>
+        <stop offset="50%" stop-color="#9b30ff" stop-opacity="0.15"/>
+        <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="bodyGrad" cx="50%" cy="40%" r="55%">
+        <stop offset="0%" stop-color="#1a2a4a"/>
+        <stop offset="100%" stop-color="#0a1020"/>
+      </radialGradient>
+      <linearGradient id="skinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#f5c8a0"/>
+        <stop offset="100%" stop-color="#d4975a"/>
+      </linearGradient>
+      <linearGradient id="hairGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#1a0530"/>
+        <stop offset="100%" stop-color="#2a0a50"/>
+      </linearGradient>
+      <filter id="auraSoft">
+        <feGaussianBlur stdDeviation="8" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="softGlow">
+        <feGaussianBlur stdDeviation="3" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+
+    <!-- Ground energy pool -->
+    <ellipse cx="260" cy="590" rx="180" ry="25" fill="url(#auraGlow)" opacity="0.6"/>
+    <ellipse cx="260" cy="590" rx="120" ry="14" fill="rgba(0,212,255,0.2)"/>
+
+    <!-- Aura flame shapes -->
+    <g opacity="0.5" filter="url(#auraSoft)">
+      <!-- Left aura -->
+      <path d="M180 560 Q140 480 150 380 Q120 440 110 540 Z" fill="rgba(0,212,255,0.3)">
+        <animateTransform attributeName="transform" type="translate" values="0,0;-8,-15;0,0" dur="2.5s" repeatCount="indefinite"/>
+      </path>
+      <path d="M170 550 Q130 460 145 360 Q115 420 105 520 Z" fill="rgba(155,48,255,0.25)">
+        <animateTransform attributeName="transform" type="translate" values="0,0;-5,-10;0,0" dur="3s" repeatCount="indefinite"/>
+      </path>
+      <!-- Right aura -->
+      <path d="M340 560 Q380 480 370 380 Q400 440 410 540 Z" fill="rgba(0,212,255,0.3)">
+        <animateTransform attributeName="transform" type="translate" values="0,0;8,-15;0,0" dur="2.5s" repeatCount="indefinite"/>
+      </path>
+      <path d="M350 550 Q390 460 375 360 Q405 420 415 520 Z" fill="rgba(155,48,255,0.25)">
+        <animateTransform attributeName="transform" type="translate" values="0,0;5,-10;0,0" dur="3s" repeatCount="indefinite"/>
+      </path>
+      <!-- Top aura -->
+      <path d="M220 150 Q200 80 260 40 Q320 80 300 150 Z" fill="rgba(0,212,255,0.2)">
+        <animateTransform attributeName="transform" type="translate" values="0,0;0,-20;0,0" dur="2s" repeatCount="indefinite"/>
+      </path>
+    </g>
+
+    <!-- LEGS -->
+    <!-- Left leg -->
+    <rect x="200" y="450" width="52" height="130" rx="12" fill="#0c1830"/>
+    <rect x="200" y="540" width="52" height="44" rx="8" fill="#0a1220"/>
+    <!-- Right leg -->
+    <rect x="268" y="450" width="52" height="130" rx="12" fill="#0c1830"/>
+    <rect x="268" y="540" width="52" height="44" rx="8" fill="#0a1220"/>
+    <!-- Boots glow -->
+    <rect x="200" y="560" width="52" height="24" rx="6" fill="#0a1220" stroke="rgba(0,212,255,0.3)" stroke-width="1"/>
+    <rect x="268" y="560" width="52" height="24" rx="6" fill="#0a1220" stroke="rgba(0,212,255,0.3)" stroke-width="1"/>
+    <!-- Leg armor details -->
+    <rect x="204" y="460" width="44" height="8" rx="3" fill="rgba(0,212,255,0.15)" stroke="rgba(0,212,255,0.3)" stroke-width="0.5"/>
+    <rect x="272" y="460" width="44" height="8" rx="3" fill="rgba(0,212,255,0.15)" stroke="rgba(0,212,255,0.3)" stroke-width="0.5"/>
+
+    <!-- Belt / waist -->
+    <rect x="188" y="435" width="144" height="20" rx="5" fill="#0d1c30" stroke="rgba(0,212,255,0.3)" stroke-width="1"/>
+    <rect x="248" y="437" width="24" height="16" rx="3" fill="#1a2a3a" stroke="rgba(255,107,0,0.5)" stroke-width="1"/>
+    <!-- Belt buckle glow -->
+    <rect x="254" y="441" width="12" height="8" rx="2" fill="rgba(255,107,0,0.4)"/>
+
+    <!-- TORSO -->
+    <path d="M188 260 Q180 280 185 440 L335 440 Q340 280 332 260 Z" fill="url(#bodyGrad)" stroke="rgba(0,212,255,0.15)" stroke-width="1"/>
+    <!-- Jacket detail lines -->
+    <path d="M260 280 L260 430" stroke="rgba(0,212,255,0.2)" stroke-width="1.5"/>
+    <path d="M220 290 Q210 350 215 420" stroke="rgba(0,212,255,0.12)" stroke-width="1"/>
+    <path d="M300 290 Q310 350 305 420" stroke="rgba(0,212,255,0.12)" stroke-width="1"/>
+    <!-- Chest emblem -->
+    <circle cx="260" cy="330" r="22" fill="rgba(0,30,60,0.8)" stroke="rgba(0,212,255,0.4)" stroke-width="1.5"/>
+    <polygon points="260,314 268,328 284,328 272,338 276,354 260,344 244,354 248,338 236,328 252,328" fill="rgba(0,212,255,0.15)" stroke="rgba(0,212,255,0.6)" stroke-width="1"/>
+    <!-- Chest glow -->
+    <circle cx="260" cy="330" r="22" fill="none" stroke="rgba(0,212,255,0.4)" stroke-width="1">
+      <animate attributeName="r" values="22;26;22" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.4;0.8;0.4" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <!-- Shoulder armor -->
+    <ellipse cx="195" cy="275" rx="24" ry="18" fill="#0d1c30" stroke="rgba(0,212,255,0.3)" stroke-width="1"/>
+    <ellipse cx="325" cy="275" rx="24" ry="18" fill="#0d1c30" stroke="rgba(0,212,255,0.3)" stroke-width="1"/>
+    <!-- Shoulder detail -->
+    <ellipse cx="195" cy="275" rx="14" ry="10" fill="rgba(0,212,255,0.08)"/>
+    <ellipse cx="325" cy="275" rx="14" ry="10" fill="rgba(0,212,255,0.08)"/>
+
+    <!-- ARMS -->
+    <!-- Left arm down/slightly out -->
+    <path d="M185 265 Q165 300 162 370 Q168 385 180 390 Q192 385 195 370 Q200 305 208 270 Z" fill="url(#bodyGrad)"/>
+    <!-- Left hand -->
+    <ellipse cx="172" cy="395" rx="18" ry="22" fill="url(#skinGrad)"/>
+    <!-- Left hand energy glow -->
+    <circle cx="172" cy="395" r="20" fill="rgba(0,212,255,0.1)" stroke="rgba(0,212,255,0.3)" stroke-width="1">
+      <animate attributeName="r" values="20;26;20" dur="1.8s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.3;1" dur="1.8s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Right arm raised slightly -->
+    <path d="M335 265 Q355 285 368 340 Q362 360 350 358 Q340 355 338 340 Q322 295 312 270 Z" fill="url(#bodyGrad)"/>
+    <!-- Right forearm/hand -->
+    <ellipse cx="372" cy="365" rx="18" ry="24" fill="url(#skinGrad)"/>
+
+    <!-- NECK -->
+    <rect x="245" y="228" width="30" height="38" rx="10" fill="url(#skinGrad)"/>
+
+    <!-- HEAD -->
+    <ellipse cx="260" cy="200" rx="55" ry="60" fill="url(#skinGrad)"/>
+    <!-- Face highlight -->
+    <ellipse cx="248" cy="185" rx="20" ry="24" fill="rgba(255,255,255,0.08)"/>
+
+    <!-- EYES -->
+    <!-- Left eye -->
+    <ellipse cx="236" cy="198" rx="14" ry="12" fill="white"/>
+    <ellipse cx="238" cy="200" rx="9" ry="10" fill="#1a0a30"/>
+    <ellipse cx="240" cy="200" rx="6" ry="7" fill="#2200aa"/>
+    <ellipse cx="241" cy="199" rx="4" ry="5" fill="#00aaff"/>
+    <ellipse cx="242" cy="198" rx="2.5" ry="3" fill="white" opacity="0.9"/>
+    <!-- Eye glow -->
+    <ellipse cx="238" cy="200" rx="9" ry="10" fill="rgba(0,150,255,0.2)">
+      <animate attributeName="opacity" values="0.2;0.5;0.2" dur="2s" repeatCount="indefinite"/>
+    </ellipse>
+
+    <!-- Right eye -->
+    <ellipse cx="284" cy="198" rx="14" ry="12" fill="white"/>
+    <ellipse cx="282" cy="200" rx="9" ry="10" fill="#1a0a30"/>
+    <ellipse cx="280" cy="200" rx="6" ry="7" fill="#2200aa"/>
+    <ellipse cx="279" cy="199" rx="4" ry="5" fill="#00aaff"/>
+    <ellipse cx="278" cy="198" rx="2.5" ry="3" fill="white" opacity="0.9"/>
+    <!-- Eye glow -->
+    <ellipse cx="282" cy="200" rx="9" ry="10" fill="rgba(0,150,255,0.2)">
+      <animate attributeName="opacity" values="0.2;0.5;0.2" dur="2s" begin="0.2s" repeatCount="indefinite"/>
+    </ellipse>
+
+    <!-- Eyebrows (sharp/determined) -->
+    <path d="M224 184 Q234 178 248 182" stroke="#2a1040" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <path d="M296 184 Q286 178 272 182" stroke="#2a1040" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+
+    <!-- Nose -->
+    <path d="M258 210 L255 222 L265 222" stroke="rgba(180,120,80,0.6)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+    <!-- Mouth (determined smirk) -->
+    <path d="M248 232 Q260 240 274 233" stroke="rgba(180,100,80,0.8)" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+    <!-- Ear left -->
+    <path d="M205 195 Q198 200 200 212 Q204 220 210 218 Q208 208 212 202 Z" fill="url(#skinGrad)"/>
+    <!-- Ear right -->
+    <path d="M315 195 Q322 200 320 212 Q316 220 310 218 Q312 208 308 202 Z" fill="url(#skinGrad)"/>
+
+    <!-- HAIR — spiky anime style -->
+    <!-- Base hair cap -->
+    <path d="M208 175 Q210 120 260 100 Q310 120 312 175 Q295 145 280 155 Q270 130 260 125 Q250 130 240 155 Q225 145 208 175 Z" fill="url(#hairGrad)"/>
+    <!-- Side hair left -->
+    <path d="M208 175 Q196 160 200 185 Q204 205 208 215" fill="url(#hairGrad)"/>
+    <!-- Side hair right -->
+    <path d="M312 175 Q324 160 320 185 Q316 205 312 215" fill="url(#hairGrad)"/>
+    <!-- Front hair strands -->
+    <path d="M240 155 Q228 140 220 115 Q232 130 240 145 Z" fill="url(#hairGrad)"/>
+    <path d="M252 130 Q248 100 244 75 Q254 108 258 128 Z" fill="url(#hairGrad)"/>
+    <!-- Main spikes -->
+    <path d="M260 125 Q258 90 252 55 Q262 88 268 122 Z" fill="#1a0530"/>
+    <path d="M270 128 Q278 88 285 50 Q278 90 272 126 Z" fill="#1a0530"/>
+    <path d="M248 130 Q235 95 228 62 Q238 95 246 128 Z" fill="#1a0530"/>
+    <path d="M280 135 Q295 100 305 68 Q295 102 282 133 Z" fill="#1a0530"/>
+    <path d="M238 140 Q222 110 208 82 Q222 112 236 138 Z" fill="#1a0530"/>
+    <!-- Hair highlights -->
+    <path d="M258 130 Q255 100 252 70" stroke="rgba(100,60,180,0.4)" stroke-width="2" fill="none"/>
+    <path d="M272 132 Q278 100 282 70" stroke="rgba(100,60,180,0.3)" stroke-width="1.5" fill="none"/>
+
+    <!-- Hair aura glow -->
+    <g opacity="0.5" filter="url(#auraSoft)">
+      <path d="M252 55 Q255 20 260 0 Q265 20 268 50 Z" fill="rgba(0,212,255,0.4)">
+        <animateTransform attributeName="transform" type="translate" values="0,0;0,-12;0,0" dur="1.8s" repeatCount="indefinite"/>
+      </path>
+      <path d="M228 62 Q224 30 222 5 Q230 32 235 60 Z" fill="rgba(155,48,255,0.3)">
+        <animateTransform attributeName="transform" type="translate" values="0,0;-5,-10;0,0" dur="2.2s" repeatCount="indefinite"/>
+      </path>
+      <path d="M285 50 Q290 18 295 0 Q292 22 288 48 Z" fill="rgba(0,212,255,0.3)">
+        <animateTransform attributeName="transform" type="translate" values="0,0;5,-10;0,0" dur="2s" repeatCount="indefinite"/>
+      </path>
+    </g>
+
+    <!-- Headband -->
+    <path d="M208 175 Q210 168 260 165 Q310 168 312 175" stroke="rgba(0,212,255,0.6)" stroke-width="4" fill="none"/>
+    <!-- Headband symbol -->
+    <rect x="247" y="161" width="26" height="14" rx="3" fill="#0a1020" stroke="rgba(0,212,255,0.5)" stroke-width="1"/>
+    <text x="260" y="172" text-anchor="middle" font-family="Orbitron" font-size="7" fill="rgba(0,212,255,0.8)">RT</text>
+
+    <!-- Collar / scarf -->
+    <path d="M228 250 Q220 258 218 272 Q240 264 260 266 Q280 264 302 272 Q300 258 292 250 Q276 268 260 270 Q244 268 228 250 Z" fill="#0d1828" stroke="rgba(0,212,255,0.2)" stroke-width="0.5"/>
+
+    <!-- Energy lines radiating from character (electric effect) -->
+    <g stroke="rgba(0,212,255,0.3)" stroke-width="1" fill="none" opacity="0.6">
+      <line x1="172" y1="395" x2="140" y2="420"><animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite"/></line>
+      <line x1="172" y1="395" x2="145" y2="370"><animate attributeName="opacity" values="0;1;0" dur="1.5s" begin="0.3s" repeatCount="indefinite"/></line>
+      <line x1="172" y1="395" x2="135" y2="395"><animate attributeName="opacity" values="0;1;0" dur="1.5s" begin="0.6s" repeatCount="indefinite"/></line>
+    </g>
+
+  </svg>
+
+  <!-- HERO TEXT CONTENT -->
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Available for Work
+    </div>
+    <h1 class="hero-name">
+      <span class="line1">RAJ</span>
+      <span class="line2">TRIVEDI</span>
+    </h1>
+    <div class="hero-title">⚡ Prompt Engineer</div>
+    <p class="hero-tagline">Crafting <em>powerful AI prompts</em> with precision and creativity — turning ideas into intelligent, scalable solutions.</p>
+    <div class="hero-quote">"Train hard, code smart, stay consistent."</div>
+    <div class="hero-buttons">
+      <a href="#projects" class="btn-primary">⚡ Explore My Work</a>
+      <a href="#" class="btn-secondary">↓ Download Resume</a>
+    </div>
+  </div>
+
+  <!-- Power level indicator -->
+  <div class="power-indicator">
+    <div class="power-label">Power Level</div>
+    <div class="power-bar-vert"><div class="power-fill-vert"></div></div>
+    <div style="font-family:'Bangers',cursive;font-size:0.9rem;color:var(--orange);">9000+</div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="scroll-indicator">
+    <div class="scroll-mouse"><div class="scroll-dot"></div></div>
+    <div class="scroll-label">Scroll</div>
+  </div>
+</section>
+
+<div class="energy-divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-title reveal"><span>About</span> Me</div>
+  <div class="section-line reveal"></div>
+  <div class="about-inner reveal">
+    <div class="about-avatar-wrap">
+      <div class="about-avatar-glow"></div>
+      <!-- Small floating avatar -->
+      <svg class="about-avatar-svg" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="skinG2" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#f5c8a0"/>
+            <stop offset="100%" stop-color="#d4975a"/>
+          </linearGradient>
+          <radialGradient id="avatarBg" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="rgba(0,212,255,0.1)"/>
+            <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+          </radialGradient>
+        </defs>
+        <circle cx="90" cy="90" r="80" fill="rgba(13,20,40,0.8)" stroke="rgba(0,212,255,0.3)" stroke-width="1.5"/>
+        <circle cx="90" cy="90" r="80" fill="url(#avatarBg)"/>
+        <!-- Body -->
+        <rect x="62" y="115" width="56" height="55" rx="8" fill="#0c1830"/>
+        <path d="M62 115 Q58 120 56 155 L124 155 Q122 120 118 115 Z" fill="#0c1830"/>
+        <!-- Neck -->
+        <rect x="82" y="100" width="16" height="18" rx="6" fill="url(#skinG2)"/>
+        <!-- Head -->
+        <ellipse cx="90" cy="82" rx="30" ry="32" fill="url(#skinG2)"/>
+        <!-- Eyes -->
+        <ellipse cx="80" cy="80" rx="7" ry="7" fill="white"/>
+        <ellipse cx="80" cy="80" rx="4.5" ry="5" fill="#00aaff" opacity="0.9"/>
+        <ellipse cx="100" cy="80" rx="7" ry="7" fill="white"/>
+        <ellipse cx="100" cy="80" rx="4.5" ry="5" fill="#00aaff" opacity="0.9"/>
+        <!-- Hair spikes -->
+        <path d="M63 72 Q66 50 75 42 Q80 60 80 72 Z" fill="#1a0530"/>
+        <path d="M78 58 Q80 35 88 28 Q94 45 92 60 Z" fill="#1a0530"/>
+        <path d="M90 56 Q96 32 104 28 Q106 48 103 60 Z" fill="#1a0530"/>
+        <path d="M103 62 Q114 45 120 50 Q116 68 108 72 Z" fill="#1a0530"/>
+        <!-- Headband -->
+        <path d="M63 72 Q75 68 90 67 Q105 68 117 72" stroke="rgba(0,212,255,0.7)" stroke-width="3" fill="none"/>
+        <!-- Chest emblem -->
+        <polygon points="90,128 95,138 105,138 97,145 100,155 90,149 80,155 83,145 75,138 85,138" fill="rgba(0,212,255,0.3)" stroke="rgba(0,212,255,0.5)" stroke-width="1"/>
+        <!-- Aura glow -->
+        <circle cx="90" cy="90" r="80" fill="none" stroke="rgba(0,212,255,0.2)" stroke-width="1">
+          <animate attributeName="r" values="80;84;80" dur="2.5s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.5;1;0.5" dur="2.5s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+    </div>
+    <div class="about-text">
+      <h3>⚡ Origin Story</h3>
+      <p>I am <strong>Raj Trivedi</strong>, a passionate prompt engineer and developer who enjoys building creative AI solutions and exploring new technologies.</p>
+      <p>Like a warrior who masters every technique before battle, I approach every project with <strong>precision, discipline, and relentless curiosity</strong> — crafting prompts that make AI think harder and deliver better.</p>
+      <div class="about-stats">
+        <div class="stat-item">
+          <div class="stat-num">5+</div>
+          <div class="stat-label">AI Projects</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">100+</div>
+          <div class="stat-label">Prompts Crafted</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">∞</div>
+          <div class="stat-label">Learning Mode</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="energy-divider"></div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-title reveal"><span>Power</span> Levels</div>
+  <div class="section-line reveal"></div>
+  <div class="skills-grid reveal">
+
+    <div class="skill-item">
+      <div class="skill-header">
+        <span class="skill-name">⚡ Prompt Engineering</span>
+        <span class="skill-level">OVER 9000</span>
+      </div>
+      <div class="skill-bar-bg">
+        <div class="skill-bar pe" data-width="95"></div>
+      </div>
+      <div class="skill-power-label">Power Level: 9500 / 10000</div>
+    </div>
+
+    <div class="skill-item">
+      <div class="skill-header">
+        <span class="skill-name">🐍 Python</span>
+        <span class="skill-level">ASCENDED</span>
+      </div>
+      <div class="skill-bar-bg">
+        <div class="skill-bar py" data-width="85"></div>
+      </div>
+      <div class="skill-power-label">Power Level: 8500 / 10000</div>
+    </div>
+
+    <div class="skill-item">
+      <div class="skill-header">
+        <span class="skill-name">☕ Java</span>
+        <span class="skill-level">ELITE</span>
+      </div>
+      <div class="skill-bar-bg">
+        <div class="skill-bar ja" data-width="80"></div>
+      </div>
+      <div class="skill-power-label">Power Level: 8000 / 10000</div>
+    </div>
+
+    <div class="skill-item">
+      <div class="skill-header">
+        <span class="skill-name">🧩 Problem Solving</span>
+        <span class="skill-level">MASTER</span>
+      </div>
+      <div class="skill-bar-bg">
+        <div class="skill-bar ps" data-width="90"></div>
+      </div>
+      <div class="skill-power-label">Power Level: 9000 / 10000</div>
+    </div>
+
+    <div class="skill-item">
+      <div class="skill-header">
+        <span class="skill-name">🤖 AI Tools</span>
+        <span class="skill-level">LEGENDARY</span>
+      </div>
+      <div class="skill-bar-bg">
+        <div class="skill-bar ai" data-width="92"></div>
+      </div>
+      <div class="skill-power-label">Power Level: 9200 / 10000</div>
+    </div>
+
+  </div>
+</section>
+
+<div class="energy-divider"></div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-title reveal"><span>Battle</span> Records</div>
+  <div class="section-line reveal"></div>
+  <div class="projects-grid reveal">
+
+    <div class="project-card">
+      <div class="project-icon">🎮</div>
+      <div class="project-tag">⭐ Featured Project</div>
+      <div class="project-title">Java Quiz Game</div>
+      <p class="project-desc">An interactive quiz game built using Java with a dynamic scoring system, engaging gameplay mechanics, and a clean terminal interface. Tests knowledge across multiple categories.</p>
+      <div class="project-tech">
+        <span class="tech-tag">Java</span>
+        <span class="tech-tag">OOP</span>
+        <span class="tech-tag">CLI</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-icon">🤖</div>
+      <div class="project-tag">🔥 AI Engineering</div>
+      <div class="project-title">Prompt Systems</div>
+      <p class="project-desc">A collection of structured prompt templates and chains designed for various AI use cases — from creative writing to data analysis and autonomous task handling.</p>
+      <div class="project-tech">
+        <span class="tech-tag">Prompt Eng.</span>
+        <span class="tech-tag">LLMs</span>
+        <span class="tech-tag">Python</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-icon">⚡</div>
+      <div class="project-tag">🛡️ Dev Project</div>
+      <div class="project-title">AI Automation Scripts</div>
+      <p class="project-desc">Python-powered automation scripts leveraging AI APIs to streamline repetitive tasks, generate content, and solve real-world workflow challenges with minimal input.</p>
+      <div class="project-tech">
+        <span class="tech-tag">Python</span>
+        <span class="tech-tag">API</span>
+        <span class="tech-tag">Automation</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="energy-divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-title reveal"><span>Send</span> A Signal</div>
+  <div class="section-line reveal"></div>
+  <div class="contact-inner reveal">
+    <div class="contact-form">
+      <div class="form-group">
+        <input type="text" placeholder="Your Name — Who challenges me?">
+      </div>
+      <div class="form-group">
+        <input type="email" placeholder="Your Email — Where to respond?">
+      </div>
+      <div class="form-group">
+        <textarea placeholder="Your Message — State your mission..."></textarea>
+      </div>
+      <button class="contact-submit">
+        <span class="submit-aura"></span>
+        ⚡ Launch Message
+      </button>
+    </div>
+
+    <div class="socials">
+      <a href="https://github.com" target="_blank" class="social-btn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        GitHub
+      </a>
+      <a href="https://linkedin.com" target="_blank" class="social-btn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        LinkedIn
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-name">RAJ TRIVEDI</div>
+  <div class="footer-right" style="text-align:center;">
+    <div style="font-family:'Orbitron',monospace;font-size:0.65rem;letter-spacing:2px;color:rgba(255,107,0,0.7);margin-bottom:4px;">"Train hard, code smart, stay consistent."</div>
+    <div>© 2025 · Prompt Engineer · All Power Reserved</div>
+  </div>
+  <div style="font-family:'Orbitron',monospace;font-size:0.65rem;letter-spacing:2px;color:rgba(0,212,255,0.5);">LEVEL 9000+</div>
+</footer>
+
+<script>
+// ─── LOADER ───────────────────────────────────────
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const loader = document.getElementById('loader');
+    loader.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+    loader.style.opacity = '0';
+    loader.style.transform = 'scale(1.1)';
+    setTimeout(() => loader.style.display = 'none', 800);
+  }, 2200);
+});
+
+// ─── CURSOR ───────────────────────────────────────
+const cursor = document.getElementById('cursor');
+const trail = document.getElementById('cursor-trail');
+let mx = -100, my = -100, tx = -100, ty = -100;
+
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+function animateCursor() {
+  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+  tx += (mx - tx) * 0.12; ty += (my - ty) * 0.12;
+  trail.style.left = tx + 'px'; trail.style.top = ty + 'px';
+  requestAnimationFrame(animateCursor);
+}
+animateCursor();
+
+document.addEventListener('mousedown', () => { cursor.style.transform = 'translate(-50%,-50%) scale(0.6)'; });
+document.addEventListener('mouseup', () => { cursor.style.transform = 'translate(-50%,-50%) scale(1)'; });
+
+// ─── PARTICLES ────────────────────────────────────
+const canvas = document.getElementById('particles-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+
+const particles = [];
+const colors = ['rgba(0,212,255,', 'rgba(155,48,255,', 'rgba(255,107,0,', 'rgba(255,255,255,'];
+
+for (let i = 0; i < 80; i++) {
+  particles.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 2 + 0.5,
+    vx: (Math.random() - 0.5) * 0.4,
+    vy: (Math.random() - 0.5) * 0.4 - 0.1,
+    alpha: Math.random() * 0.6 + 0.1,
+    color: colors[Math.floor(Math.random() * colors.length)],
+    pulse: Math.random() * Math.PI * 2
+  });
+}
+
+function drawParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => {
+    p.pulse += 0.02;
+    const a = p.alpha * (0.6 + 0.4 * Math.sin(p.pulse));
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = p.color + a + ')';
+    ctx.fill();
+    // occasional glow
+    if (p.r > 1.5) {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r * 3, 0, Math.PI * 2);
+      ctx.fillStyle = p.color + (a * 0.15) + ')';
+      ctx.fill();
+    }
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0) p.x = canvas.width;
+    if (p.x > canvas.width) p.x = 0;
+    if (p.y < 0) p.y = canvas.height;
+    if (p.y > canvas.height) p.y = 0;
+  });
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+// ─── SCROLL REVEAL ────────────────────────────────
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.15 });
+reveals.forEach(el => observer.observe(el));
+
+// ─── SKILL BARS ANIMATION ─────────────────────────
+const skillBars = document.querySelectorAll('.skill-bar');
+const skillObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const bar = e.target;
+      const width = bar.getAttribute('data-width');
+      setTimeout(() => { bar.style.width = width + '%'; }, 200);
+      skillObserver.unobserve(bar);
+    }
+  });
+}, { threshold: 0.3 });
+skillBars.forEach(bar => skillObserver.observe(bar));
+
+// ─── LIGHTNING BOLTS ──────────────────────────────
+const lightningContainer = document.createElement('div');
+lightningContainer.className = 'lightning-container';
+document.getElementById('hero').appendChild(lightningContainer);
+
+function spawnLightning() {
+  const bolt = document.createElement('div');
+  bolt.className = 'lightning';
+  const x = 250 + Math.random() * 200;
+  const h = 40 + Math.random() * 120;
+  bolt.style.cssText = `
+    left:${x}px; top:${80 + Math.random() * 300}px;
+    height:${h}px; opacity:0;
+    transform:rotate(${(Math.random()-0.5)*30}deg);
+  `;
+  lightningContainer.appendChild(bolt);
+  bolt.animate([
+    {opacity: 0}, {opacity: 1}, {opacity: 0.5}, {opacity: 1}, {opacity: 0}
+  ], { duration: 300 + Math.random() * 400, easing: 'ease-out' }).onfinish = () => bolt.remove();
+}
+setInterval(spawnLightning, 600 + Math.random() * 800);
+setInterval(spawnLightning, 900 + Math.random() * 600);
+
+// ─── CONTACT SUBMIT ───────────────────────────────
+document.querySelector('.contact-submit').addEventListener('click', function() {
+  this.textContent = '✅ Message Launched!';
+  this.style.background = 'linear-gradient(135deg, #00cc88, #00ffcc)';
+  setTimeout(() => {
+    this.innerHTML = '<span class="submit-aura"></span>⚡ Launch Message';
+    this.style.background = '';
+  }, 3000);
+});
+
+// ─── SMOOTH SCROLL ────────────────────────────────
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+  });
+});
+
+// ─── HOVER GLOW ON CARDS ──────────────────────────
+document.querySelectorAll('.project-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    card.style.setProperty('--x', x + '%');
+    card.style.setProperty('--y', y + '%');
+  });
+});
+</script>
+</body>
+</html>

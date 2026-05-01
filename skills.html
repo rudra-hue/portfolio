@@ -7,65 +7,49 @@
   <title>Rudra Parmar — Skills</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
-  <style>
-    @import url('https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,900&f[]=satoshi@400,500,700&display=swap');
-
-    :root {
-      --bg: #050505;
-      --accent-cyan: #00f2ff;
-      --accent-magenta: #7000ff;
-      --surface: #111111;
-    }
-
-    body {
-      font-family: 'Satoshi', sans-serif;
-      background-color: var(--bg);
-      color: #fff;
-      overflow-x: hidden;
-    }
-
-    h1, h2, h3 { font-family: 'Cabinet Grotesk', sans-serif; }
-    .perspective-1000 { perspective: 1000px; }
-    .preserve-3d { transform-style: preserve-3d; }
-    .hover-3d:hover { transform: rotateY(15deg) rotateX(10deg) translateZ(20px); }
-    .neon-glow-cyan { text-shadow: 0 0 10px rgba(0, 242, 255, 0.5), 0 0 20px rgba(0, 242, 255, 0.3); }
-
-    .bg-noise { background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png'); opacity: 0.1; }
-
-    .grid-bg {
-      background-image: linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
-      background-size: 50px 50px;
-    }
-
-    .section-transition { transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
-  </style>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Exo+2:wght@400;600;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-  <div class="min-h-screen relative selection:bg-cyan-500/30">
-    <div class="fixed inset-0 bg-noise pointer-events-none z-0"></div>
+  <!-- CURSOR -->
+  <div id="cursor"></div>
+  <div id="cursor-trail"></div>
+
+  <!-- LOADER -->
+  <div id="loader">
+    <div class="loader-text">POWERING UP...</div>
+    <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+    <div style="font-family:'Orbitron',monospace;font-size:0.65rem;letter-spacing:4px;color:rgba(0,212,255,0.6);">RUDRA PARMAR — INITIALIZING</div>
+  </div>
+
+  <!-- PARTICLES -->
+  <canvas id="particles-canvas"></canvas>
+
+  <div class="min-h-screen relative selection:bg-blue-500/30">
+    <div class="fixed inset-0 pointer-events-none z-0"></div>
     <div class="fixed inset-0 grid-bg pointer-events-none z-0 opacity-40"></div>
     <nav class="fixed top-0 w-full z-50 px-8 py-6 flex justify-between items-center backdrop-blur-md bg-black/10 border-b border-white/5">
-      <a id="nav-logo-link" href="index.html" class="text-2xl font-black tracking-tighter text-white hover:text-cyan-400 transition-colors">RP<span class="text-cyan-500">.</span></a>
+      <a id="nav-logo-link" href="index.html" class="text-2xl font-black tracking-tighter text-white hover:text-orange-400 transition-colors">RP<span class="text-orange-500">.</span></a>
             <!-- Mobile Menu Button -->
-      <button id="mobile-menu-btn" class="md:hidden text-white hover:text-cyan-400 focus:outline-none">
+      <button id="mobile-menu-btn" class="md:hidden text-white hover:text-orange-400 focus:outline-none">
         <iconify-icon icon="lucide:menu" class="text-3xl"></iconify-icon>
       </button>
 
       <div class="hidden md:flex gap-10 items-center font-medium text-white/70">
-        <a id="nav-home-link" href="index.html" class="hover:text-cyan-400 transition-colors uppercase text-xs tracking-widest">Home</a>
-        <a id="nav-about-link" href="about.html" class="hover:text-cyan-400 transition-colors uppercase text-xs tracking-widest">About</a>
-        <a id="nav-skills-link" href="skills.html" class="text-cyan-400 transition-colors uppercase text-xs tracking-widest">Skills</a>
-        <a id="nav-projects-link" href="projects.html" class="hover:text-cyan-400 transition-colors uppercase text-xs tracking-widest">Projects</a>
+        <a id="nav-home-link" href="index.html" class="hover:text-orange-400 transition-colors uppercase text-xs tracking-widest">Home</a>
+        <a id="nav-about-link" href="about.html" class="hover:text-orange-400 transition-colors uppercase text-xs tracking-widest">About</a>
+        <a id="nav-skills-link" href="skills.html" class="text-orange-400 transition-colors uppercase text-xs tracking-widest">Skills</a>
+        <a id="nav-projects-link" href="projects.html" class="hover:text-orange-400 transition-colors uppercase text-xs tracking-widest">Projects</a>
         <a id="nav-contact-link" href="contact.html" class="px-6 py-2 bg-white text-black hover:bg-cyan-400 transition-all font-bold rounded-full uppercase text-xs tracking-widest">Hire Me</a>
       </div>
 
       <!-- Mobile Menu -->
       <div id="mobile-menu" class="absolute top-full left-0 w-full bg-black/95 border-b border-white/10 flex flex-col items-center py-6 gap-6 md:hidden z-50 transition-all duration-300 ease-out opacity-0 pointer-events-none -translate-y-4">
-        <a id="mobile-nav-home-link" href="index.html" class="hover:text-cyan-400 transition-colors uppercase text-xs tracking-widest">Home</a>
-        <a id="mobile-nav-about-link" href="about.html" class="hover:text-cyan-400 transition-colors uppercase text-xs tracking-widest">About</a>
-        <a id="mobile-nav-skills-link" href="skills.html" class="text-cyan-400 transition-colors uppercase text-xs tracking-widest">Skills</a>
-        <a id="mobile-nav-projects-link" href="projects.html" class="hover:text-cyan-400 transition-colors uppercase text-xs tracking-widest">Projects</a>
+        <a id="mobile-nav-home-link" href="index.html" class="hover:text-orange-400 transition-colors uppercase text-xs tracking-widest">Home</a>
+        <a id="mobile-nav-about-link" href="about.html" class="hover:text-orange-400 transition-colors uppercase text-xs tracking-widest">About</a>
+        <a id="mobile-nav-skills-link" href="skills.html" class="text-orange-400 transition-colors uppercase text-xs tracking-widest">Skills</a>
+        <a id="mobile-nav-projects-link" href="projects.html" class="hover:text-orange-400 transition-colors uppercase text-xs tracking-widest">Projects</a>
         <a id="mobile-nav-contact-link" href="contact.html" class="px-6 py-2 bg-white text-black hover:bg-cyan-400 transition-all font-bold rounded-full uppercase text-xs tracking-widest">Hire Me</a>
       </div>
     </nav>
@@ -78,33 +62,33 @@
           </div>
           
           <div class="mb-16">
-            <h3 class="text-2xl font-black mb-8 text-cyan-400 uppercase tracking-widest text-center">AI / Machine Learning</h3>
+            <h3 class="text-2xl font-black mb-8 text-orange-400 uppercase tracking-widest text-center">AI / Machine Learning</h3>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 perspective-1000">
               <div class="group preserve-3d hover-3d bg-white/5 border border-white/10 p-10 flex flex-col items-center justify-center gap-4 transition-all duration-500 cursor-default">
                 <iconify-icon icon="logos:python" class="text-6xl group-hover:scale-110 transition-transform"></iconify-icon>
                 <span class="font-black uppercase tracking-tighter text-xl mt-2">Python</span>
-                <div class="w-0 h-[2px] bg-cyan-500 group-hover:w-full transition-all duration-500"></div>
+                <div class="w-0 h-[2px] bg-orange-500 group-hover:w-full transition-all duration-500"></div>
               </div>
               <div class="group preserve-3d hover-3d bg-white/5 border border-white/10 p-10 flex flex-col items-center justify-center gap-4 transition-all duration-500 cursor-default">
                 <iconify-icon icon="logos:c-plusplus" class="text-6xl group-hover:scale-110 transition-transform"></iconify-icon>
                 <span class="font-black uppercase tracking-tighter text-xl mt-2">C++</span>
-                <div class="w-0 h-[2px] bg-cyan-500 group-hover:w-full transition-all duration-500"></div>
+                <div class="w-0 h-[2px] bg-orange-500 group-hover:w-full transition-all duration-500"></div>
               </div>
               <div class="group preserve-3d hover-3d bg-white/5 border border-white/10 p-10 flex flex-col items-center justify-center gap-4 transition-all duration-500 cursor-default">
                 <iconify-icon icon="logos:numpy" class="text-6xl group-hover:scale-110 transition-transform"></iconify-icon>
                 <span class="font-black uppercase tracking-tighter text-base mt-2">NumPy</span>
-                <div class="w-0 h-[2px] bg-cyan-500 group-hover:w-full transition-all duration-500"></div>
+                <div class="w-0 h-[2px] bg-orange-500 group-hover:w-full transition-all duration-500"></div>
               </div>
               <div class="group preserve-3d hover-3d bg-white/5 border border-white/10 p-10 flex flex-col items-center justify-center gap-4 transition-all duration-500 cursor-default">
                 <iconify-icon icon="simple-icons:pandas" class="text-6xl text-white group-hover:scale-110 transition-transform"></iconify-icon>
                 <span class="font-black uppercase tracking-tighter text-xl mt-2">Pandas</span>
-                <div class="w-0 h-[2px] bg-cyan-500 group-hover:w-full transition-all duration-500"></div>
+                <div class="w-0 h-[2px] bg-orange-500 group-hover:w-full transition-all duration-500"></div>
               </div>
             </div>
             <!-- Sub-skills -->
             <div class="flex justify-center gap-4 mt-8 flex-wrap">
-              <span class="px-4 py-2 bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-sm font-bold tracking-widest rounded-full">Machine Learning</span>
-              <span class="px-4 py-2 bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-sm font-bold tracking-widest rounded-full">Regression</span>
+              <span class="px-4 py-2 bg-orange-500/10 border border-orange-500/30 text-orange-400 text-sm font-bold tracking-widest rounded-full">Machine Learning</span>
+              <span class="px-4 py-2 bg-orange-500/10 border border-orange-500/30 text-orange-400 text-sm font-bold tracking-widest rounded-full">Regression</span>
             </div>
           </div>
 
@@ -171,39 +155,9 @@
         <a href="https://github.com/rudra-hue" target="_blank" class="hover:text-white transition-colors">GitHub</a>
       </div>
       <p>Designed for the digital elite.</p>
-    </footer>
+        </footer>
   </div>
-  <script>
-    const observerOptions = { threshold: 0.1 };
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('opacity-100', 'translate-y-0');
-          entry.target.classList.remove('opacity-0', 'translate-y-10');
-        }
-      });
-    }, observerOptions);
-    document.querySelectorAll('section').forEach(section => {
-      section.classList.add('opacity-0', 'translate-y-10', 'section-transition');
-      observer.observe(section);
-    });
-  </script>
-
-  <!-- Mobile Menu Script -->
-  <script>
-    const mobileBtn = document.getElementById('mobile-menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    if(mobileBtn && mobileMenu) {
-      mobileBtn.addEventListener('click', () => {
-        mobileMenu.classList.toggle('opacity-0');
-        mobileMenu.classList.toggle('pointer-events-none');
-        mobileMenu.classList.toggle('-translate-y-4');
-        mobileMenu.classList.toggle('opacity-100');
-        mobileMenu.classList.toggle('pointer-events-auto');
-        mobileMenu.classList.toggle('translate-y-0');
-      });
-    }
-  </script>
+  <script src="main.js"></script>
 </body>
 
 
