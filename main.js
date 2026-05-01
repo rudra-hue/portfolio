@@ -1,13 +1,20 @@
   // ─── LOADER ───────────────────────────────────────
-  setTimeout(() => {
-    const loader = document.getElementById('loader');
-    if (loader) {
-      loader.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-      loader.style.opacity = '0';
-      loader.style.transform = 'scale(1.1)';
-      setTimeout(() => loader.style.display = 'none', 800);
+  const loader = document.getElementById('loader');
+  if (loader) {
+    if (sessionStorage.getItem('loader_completed')) {
+      loader.style.display = 'none';
+    } else {
+      setTimeout(() => {
+        loader.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        loader.style.opacity = '0';
+        loader.style.transform = 'scale(1.1)';
+        setTimeout(() => {
+          loader.style.display = 'none';
+          sessionStorage.setItem('loader_completed', 'true');
+        }, 800);
+      }, 2200);
     }
-  }, 2200);
+  }
 
   // ─── CURSOR ───────────────────────────────────────
   const cursor = document.getElementById('cursor');
