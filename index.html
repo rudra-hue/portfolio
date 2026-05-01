@@ -174,48 +174,7 @@
       <p>Designed for the digital elite.</p>
     </footer>
   </div>
-  <script src="main.js?v=5"></script>
-  <script>
-    // Interactive Terminal Animation
-    const termLines = [
-      "> Initializing Machine Learning Core...",
-      "> Connecting to Deep Learning API...",
-      "> Found 4 CUDA Cores...",
-      "> Import PyTorch, NumPy, Pandas",
-      "> Compiling Network Geometry 99%",
-      "> Training Started. Epoch 1...",
-      "> Model Accuracy Optimization...",
-      "> Ready."
-    ];
-    let termIndex = 0;
-    const termDiv = document.getElementById('ml-terminal');
-    if(termDiv) {
-      setInterval(() => {
-        termDiv.innerHTML = `<p class="opacity-100 text-cyan-300">${termLines[termIndex]}</p>` + termDiv.innerHTML;
-        termIndex = (termIndex + 1) % termLines.length;
-        if(termDiv.children.length > 4) { termDiv.removeChild(termDiv.lastChild); }
-        Array.from(termDiv.children).forEach((child, i) => {
-           if(i !== 0) child.className = `opacity-${Math.max(10, 80 - (i*20))}`;
-        });
-      }, 2000);
-    }
-    
-    // Typewriter Effect
-    const words = ["Machine Learning", "Robust Infrastructure", "Intelligent Systems", "Performant Python"];
-    let i = 0;
-    const typewriterElement = document.getElementById('typewriter');
-    if(typewriterElement) {
-      setInterval(() => {
-        typewriterElement.style.opacity = 0;
-        setTimeout(() => {
-          i = (i + 1) % words.length;
-          typewriterElement.innerText = words[i];
-          typewriterElement.style.opacity = 1;
-        }, 500);
-      }, 3000);
-      typewriterElement.style.transition = 'opacity 0.5s ease-in-out';
-    }
-  </script>
+  <script src="main.js?v=6"></script>
 </body>
 
 
