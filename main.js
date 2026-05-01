@@ -1,7 +1,12 @@
   // ─── LOADER ───────────────────────────────────────
   const loader = document.getElementById('loader');
   if (loader) {
-    if (sessionStorage.getItem('loader_completed')) {
+    let alreadyPlayed = false;
+    try {
+      alreadyPlayed = sessionStorage.getItem('loader_completed') === 'true';
+    } catch(e) {}
+    
+    if (alreadyPlayed) {
       loader.style.display = 'none';
     } else {
       setTimeout(() => {
@@ -10,7 +15,7 @@
         loader.style.transform = 'scale(1.1)';
         setTimeout(() => {
           loader.style.display = 'none';
-          sessionStorage.setItem('loader_completed', 'true');
+          try { sessionStorage.setItem('loader_completed', 'true'); } catch(e) {}
         }, 800);
       }, 2200);
     }
